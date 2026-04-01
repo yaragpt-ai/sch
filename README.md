@@ -6,53 +6,39 @@ C benzeri sözdizimine sahip, tamamen Türkçe anahtar kelimelerle yazılmış b
 
 ## 🚀 Hızlı Başlangıç
 
-### Interpreter ile çalıştır (Python gerekli)
+### En Kolay: Tek Komutla .exe Üret
+
 ```bash
-python -m turk.main examples/merhaba.turk
+python derle.py program.turk        # .exe üret
+python derle.py program.turk -r     # .exe üret ve çalıştır
 ```
 
-### Compiler ile .exe üret (Python + gcc gerekli)
+Bu kadar! `.c` dosyası otomatik temizlenir, geriye sadece `.exe` kalır.
+
+### Interpreter ile çalıştır (Python gerekli)
 ```bash
-python -m turk.compiler examples/merhaba.turk -r
+python -m turk.main dosya.turk
 ```
 
 ## 📖 İki Çalıştırma Yöntemi
 
-TÜRK dilinde yazdığınız kodları iki farklı şekilde çalıştırabilirsiniz:
+### Yöntem 1: Tek Komutla .exe (Önerilen)
 
-### Yöntem 1: Interpreter (Yorumlayıcı)
+```bash
+python derle.py program.turk        # .exe üret
+python derle.py program.turk -r     # .exe üret ve hemen çalıştır
+python derle.py program.turk -o myapp  # farklı isimle
+```
 
-Python üzerinde çalışan yorumlayıcı. Hızlı test ve geliştirme için idealdir.
+Gereksinim: gcc (MINGW, MSYS2, Linux, macOS). `.c` dosyası otomatik temizlenir.
+
+### Yöntem 2: Interpreter (Hızlı Test)
 
 ```bash
 python -m turk.main dosya.turk
 ```
 
-**Avantajları:** Kurulumu kolay, hata ayıklama basit
-**Dezavantajları:** Python gerektirir, yavaş çalışır
-
-### Yöntem 2: Compiler (Derleyici) → .exe
-
-TÜRK kodunu önce C'ye, sonra gcc ile native `.exe` dosyasına derler.
-
-```bash
-# Adım adım
-python -m turk.compiler program.turk          # .c dosyası üret
-gcc program.c -o program.exe -lm              # .exe üret
-program.exe                                   # Çalıştır
-
-# Tek komutla (derle + çalıştır)
-python -m turk.compiler program.turk -r
-
-# Sadece derle, çalıştırma
-python -m turk.compiler program.turk -c
-
-# C kodunu ekrana bas
-python -m turk.compiler program.turk --stdout
-```
-
-**Avantajları:** Python gerektirmez, native hız, bağımsız dağıtım
-**Dezavantajları:** gcc kurulu olmalı
+Python dışında hiçbir şey gerektirmez ama yavaş çalışır.
 
 ## ⚙️ Compiler Nasıl Çalışır?
 
@@ -127,12 +113,48 @@ ile (i <= 5) {
 }
 ```
 
-**2. C koduna çevirin:**
+**2. Tek komutla derle ve çalıştır:**
 ```bash
-python -m turk.compiler test.turk
+python derle.py test.turk -r
 ```
 
-**3. Üretilen C kodu (`test.c`):**
+**Çıktı:**
+```
+[1/4] Okunuyor: test.turk
+[2/4] Analiz ediliyor...
+[3/4] C kodu uretiliyor...
+[4/4] GCC ile derleniyor...
+
+Basarili -> test.exe
+
+--- test.turk cikti ---
+1
+^2 =
+1
+2
+^2 =
+4
+3
+^2 =
+9
+4
+^2 =
+16
+5
+^2 =
+25
+```
+
+`.c` dosyası otomatik silinir, geriye sadece `test.exe` kalır. Artık Python'a ihtiyaç YOK.
+
+### Arka Planda Ne Oluyor?
+
+İsterseniz C kodunu da görebilirsiniz (`--stdout` ile `.c` dosyası oluşturmadan):
+
+```bash
+python derle.py test.turk --stdout
+```
+
 ```c
 /* === TÜRK Dili Runtime === */
 #include <stdio.h>
@@ -157,41 +179,14 @@ int main() {
 }
 ```
 
-**4. gcc ile derleyin:**
-```bash
-gcc test.c -o test.exe -lm
-```
-
-**5. Çalıştırın (Python'a ihtiyaç YOK):**
-```bash
-test.exe
-```
-
-```
-1
-^2 =
-1
-2
-^2 =
-4
-3
-^2 =
-9
-4
-^2 =
-16
-5
-^2 =
-25
-```
-
 ### Compiler Komut Seçenekleri
 
 | Seçenek | Açıklama |
 |---------|----------|
-| `dosya.turk` | Derlenecek TÜRK dosyası |
-| `-c`, `--compile` | C kodunu gcc ile derle |
-| `-r`, `--run` | Derle ve çalıştır |
+| `python derle.py program.turk` | .exe üret |
+| `python derle.py program.turk -r` | .exe üret ve çalıştır |
+| `python derle.py program.turk -o isim` | farklı çıktı adı |
+| `python derle.py program.turk --stdout` | C kodunu ekrana bas |
 | `-o AD`, `--cikti AD` | Çıktı dosya adı |
 | `--stdout` | C kodunu ekrana bas |
 | `--temizle` | Geçici .c dosyasını sil |
