@@ -1,0 +1,25 @@
+// TÜRK Dili - Faktöriyel ve Kombinasyon
+
+fonk tamsayı faktoriyel(tamsayı n) {
+    eğer (n <= 1) {
+        dön 1;
+    }
+    dön n * faktoriyel(n - 1);
+}
+
+fonk tamsayı kombinasyon(tamsayı n, tamsayı r) {
+    dön faktoriyel(n) / (faktoriyel(r) * faktoriyel(n - r));
+}
+
+// Faktöriyel tablosu
+tamsayı i = 0;
+ile (i <= 10) {
+    yazdir(i);
+    yazdir("! =");
+    yazdir(faktoriyel(i));
+    i = i + 1;
+}
+
+// Kombinasyon: 5 üzerinden 3
+yazdir("C(5,3) =");
+yazdir(kombinasyon(5, 3));

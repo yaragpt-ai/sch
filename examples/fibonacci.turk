@@ -1,0 +1,26 @@
+// TÜRK Dili - Fibonacci (İteratif - Hızlı)
+
+fonk tamsayı fib(tamsayı n) {
+    eğer (n <= 1) {
+        dön n;
+    }
+    tamsayı onceki = 0;
+    tamsayı mevcut = 1;
+    tamsayı i = 2;
+    ile (i <= n) {
+        tamsayı gecici = onceki + mevcut;
+        onceki = mevcut;
+        mevcut = gecici;
+        i = i + 1;
+    }
+    dön mevcut;
+}
+
+// İlk 20 fibonacci sayısı
+tamsayı adet = 20;
+tamsayı i = 0;
+
+ile (i < adet) {
+    yazdir(fib(i));
+    i = i + 1;
+}

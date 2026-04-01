@@ -1,0 +1,34 @@
+// TÜRK Dili - Basit Hesaplama
+
+fonk tamsayı kare(tamsayı n) {
+    dön n * n;
+}
+
+fonk tamsayı kup(tamsayı n) {
+    dön n * n * n;
+}
+
+// Kare ve küp tablosu
+tamsayı i = 1;
+ile (i <= 10) {
+    yazdir(i);
+    yazdir("^2 =");
+    yazdir(kare(i));
+    yazdir(i);
+    yazdir("^3 =");
+    yazdir(kup(i));
+    i = i + 1;
+}
+
+// Mutlak değer
+fonk tamsayı mutlak(tamsayı n) {
+    eğer (n < 0) {
+        dön -n;
+    }
+    dön n;
+}
+
+yazdir("Mutlak(-42) =");
+yazdir(mutlak(-42));
+yazdir("Mutlak(42) =");
+yazdir(mutlak(42));

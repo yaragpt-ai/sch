@@ -1,0 +1,20 @@
+// TÜRK Dili - FizzBuzz
+// 1'den 100'e kadar sayılar:
+// 3'e bölünüyorsa -> "Fizz"
+// 5'e bölünüyorsa -> "Buzz"
+// 15'e bölünüyorsa -> "FizzBuzz"
+
+tamsayı sayi = 1;
+
+ile (sayi <= 100) {
+    eğer (sayi % 15 == 0) {
+        yazdir("FizzBuzz");
+    } değilse eğer (sayi % 3 == 0) {
+        yazdir("Fizz");
+    } değilse eğer (sayi % 5 == 0) {
+        yazdir("Buzz");
+    } değilse {
+        yazdir(sayi);
+    }
+    sayi = sayi + 1;
+}

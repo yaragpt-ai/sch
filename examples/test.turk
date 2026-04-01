@@ -1,0 +1,18 @@
+// TÜRK Dili - Basit Test
+tamsayı a = 10;
+tamsayı b = 20;
+tamsayı toplam = a + b;
+yazdir(toplam);
+
+eğer (toplam > 25) {
+    yazdir("Toplam büyük");
+} değilse {
+    yazdir("Toplam küçük");
+}
+
+// Döngü testi
+tamsayı sayac = 0;
+ile (sayac < 5) {
+    yazdir(sayac);
+    sayac = sayac + 1;
+}

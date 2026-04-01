@@ -1,0 +1,31 @@
+// TÜRK Dili - Asal Sayı Kontrolü
+
+fonk mantık asal_mi(tamsayı sayi) {
+    eğer (sayi < 2) {
+        dön yanlış;
+    }
+    eğer (sayi == 2) {
+        dön doğru;
+    }
+    eğer (sayi % 2 == 0) {
+        dön yanlış;
+    }
+
+    tamsayı bolen = 3;
+    ile (bolen * bolen <= sayi) {
+        eğer (sayi % bolen == 0) {
+            dön yanlış;
+        }
+        bolen = bolen + 2;
+    }
+    dön doğru;
+}
+
+// 1 ile 50 arasındaki asal sayıları bul
+tamsayı sayi = 1;
+ile (sayi <= 50) {
+    eğer (asal_mi(sayi)) {
+        yazdir(sayi);
+    }
+    sayi = sayi + 1;
+}

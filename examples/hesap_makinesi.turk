@@ -1,0 +1,40 @@
+// TÜRK Dili - Hesap Makinesi
+
+fonk ondalık hesapla(metin islem, ondalık a, ondalık b) {
+    eğer (islem == "+") {
+        dön a + b;
+    }
+    eğer (islem == "-") {
+        dön a - b;
+    }
+    eğer (islem == "*") {
+        dön a * b;
+    }
+    eğer (islem == "/") {
+        eğer (b == 0) {
+            yazdir("Sıfıra bölme hatası!");
+            dön 0;
+        }
+        dön a / b;
+    }
+    yazdir("Bilinmeyen işlem:");
+    yazdir(islem);
+    dön 0;
+}
+
+// Test
+ondalık sonuc = hesapla("+", 15.5, 4.5);
+yazdir("15.5 + 4.5 =");
+yazdir(sonuc);
+
+sonuc = hesapla("*", 7, 8);
+yazdir("7 * 8 =");
+yazdir(sonuc);
+
+sonuc = hesapla("/", 100, 4);
+yazdir("100 / 4 =");
+yazdir(sonuc);
+
+sonuc = hesapla("-", 50, 23);
+yazdir("50 - 23 =");
+yazdir(sonuc);
