@@ -1,0 +1,21 @@
+{
+  "name": "turk-lang",
+  "displayName": "TÜRK Language Support",
+  "description": "Syntax highlighting for TURK programming language",
+  "version": "1.0.0",
+  "publisher": "turk",
+  "engines": { "vscode": "^1.0.0" },
+  "contributes": {
+    "languages": [{
+      "id": "turk",
+      "aliases": ["TÜRK", "turk"],
+      "extensions": [".turk"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "turk",
+      "scopeName": "source.turk",
+      "path": "./turk.tmLanguage.json"
+    }]
+  }
+}
