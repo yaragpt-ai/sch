@@ -1,28 +1,28 @@
 # 🇹🇷 TÜRK Programlama Dili
 
-C benzeri sözdizimine sahip, tamamen Türkçe anahtar kelimelerle yazılmış bir programlama dili.
+C benzeri sözdizimine sahip, tamamen Türkçe anahtar kelimelerle yazılmış bir programlama dili. 😎 😎😎 😎 😎😎
 
-> _"Dennis Ritchie ile birlikte C'nin ruhunu Türkçeye taşıdık."_
+> _"Dennis Ritchie ile birlikte C'nin ruhunu Türkçeye taşıdık."_ 😎
 
-## 🚀 Hızlı Başlangıç
+## 🚀 Hızlı Başlangıç 😎
 
-### En Kolay: Tek Komutla .exe Üret
+### En Kolay: Tek Komutla .exe Üret 😎
 
 ```bash
 python derle.py program.turk        # .exe üret
 python derle.py program.turk -r     # .exe üret ve çalıştır
 ```
 
-Bu kadar! `.c` dosyası otomatik temizlenir, geriye sadece `.exe` kalır.
+Bu kadar! `.c` dosyası otomatik temizlenir, geriye sadece `.exe` kalır. 😎
 
-### Interpreter ile çalıştır (Python gerekli)
+### Interpreter ile çalıştır (Python gerekli) 😎
 ```bash
 python -m turk.main dosya.turk
 ```
 
-## 📖 İki Çalıştırma Yöntemi
+## 📖 İki Çalıştırma Yöntemi 😎
 
-### Yöntem 1: Tek Komutla .exe (Önerilen)
+### Yöntem 1: Tek Komutla .exe (Önerilen) 😎
 
 ```bash
 python derle.py program.turk        # .exe üret
@@ -30,9 +30,9 @@ python derle.py program.turk -r     # .exe üret ve hemen çalıştır
 python derle.py program.turk -o myapp  # farklı isimle
 ```
 
-Gereksinim: gcc (MINGW, MSYS2, Linux, macOS). `.c` dosyası otomatik temizlenir.
+Gereksinim: gcc (MINGW, MSYS2, Linux, macOS). `.c` dosyası otomatik temizlenir. 😎
 
-### Yöntem 2: Interpreter (Hızlı Test)
+### Yöntem 2: Interpreter (Hızlı Test) 😎
 
 ```bash
 python -m turk.main dosya.turk
@@ -369,6 +369,6 @@ dil/
 
 Pull request'ler ve issue'lar hoş geldiniz!
 
-## 📜 Lisans
+## 📜 Lisans 🕵️ 🕵️ 🕵️
 
 Milli İstihbarat Teşkilatı
