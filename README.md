@@ -4,24 +4,207 @@ C benzeri sözdizimine sahip, tamamen Türkçe anahtar kelimelerle yazılmış b
 
 > _"Dennis Ritchie ile birlikte C'nin ruhunu Türkçeye taşıdık."_
 
-## 🚀 Kurulum
+## 🚀 Hızlı Başlangıç
 
+### Interpreter ile çalıştır (Python gerekli)
 ```bash
-# Python 3.8+ gerekli
 python -m turk.main examples/merhaba.turk
 ```
 
-## 📖 Kullanım
+### Compiler ile .exe üret (Python + gcc gerekli)
+```bash
+python -m turk.compiler examples/merhaba.turk -r
+```
 
-### Dosya çalıştırma
+## 📖 İki Çalıştırma Yöntemi
+
+TÜRK dilinde yazdığınız kodları iki farklı şekilde çalıştırabilirsiniz:
+
+### Yöntem 1: Interpreter (Yorumlayıcı)
+
+Python üzerinde çalışan yorumlayıcı. Hızlı test ve geliştirme için idealdir.
+
 ```bash
 python -m turk.main dosya.turk
 ```
 
-### Etkileşimli mod
+**Avantajları:** Kurulumu kolay, hata ayıklama basit
+**Dezavantajları:** Python gerektirir, yavaş çalışır
+
+### Yöntem 2: Compiler (Derleyici) → .exe
+
+TÜRK kodunu önce C'ye, sonra gcc ile native `.exe` dosyasına derler.
+
 ```bash
-python -m turk.main
+# Adım adım
+python -m turk.compiler program.turk          # .c dosyası üret
+gcc program.c -o program.exe -lm              # .exe üret
+program.exe                                   # Çalıştır
+
+# Tek komutla (derle + çalıştır)
+python -m turk.compiler program.turk -r
+
+# Sadece derle, çalıştırma
+python -m turk.compiler program.turk -c
+
+# C kodunu ekrana bas
+python -m turk.compiler program.turk --stdout
 ```
+
+**Avantajları:** Python gerektirmez, native hız, bağımsız dağıtım
+**Dezavantajları:** gcc kurulu olmalı
+
+## ⚙️ Compiler Nasıl Çalışır?
+
+### Derleme Pipeline'ı
+
+```
+┌─────────────┐     ┌──────────┐     ┌──────────┐     ┌─────────────┐     ┌─────────┐     ┌──────────┐
+│  program    │────▶│  Lexer   │────▶│  Parser  │────▶│ KodUretici  │────▶│  .c     │────▶│  .exe    │
+│  .turk      │     │          │     │          │     │ (codegen)   │     │  kodu   │     │  (gcc)   │
+└─────────────┘     └──────────┘     └──────────┘     └─────────────┘     └─────────┘     └──────────┘
+   TÜRK kodu         Token'lar       AST (ağaç)       C kaynak kodu      C dosyası       Native binary
+```
+
+### Adım 1: Lexer — Sözcüksel Çözümleme
+
+Kaynak kodu anlamlı parçalara (token) böler:
+
+```
+Girdi:  tamsayı x = 42;
+
+Çıktı:  [TAMSAYI, TANITLAYICI(x), ATAMA(=), TAM_SAYI(42), NOKTALI_VIRGUL(;)]
+```
+
+### Adım 2: Parser — Ayrıştırma
+
+Token'lardan bir AST (Soyut Sözdizim Ağacı) oluşturur:
+
+```
+DegiskenTanim(
+  tip: "tamsayı",
+  ad: "x",
+  deger: SayiIfade(42)
+)
+```
+
+### Adım 3: KodUretici — C Kodu Üretimi
+
+AST'yi C koduna çevirir. Her TÜRK yapısının C karşılığı vardır:
+
+| TÜRK | C |
+|------|---|
+| `tamsayı` | `int` |
+| `ondalık` | `double` |
+| `metin` | `char*` |
+| `eğer (kosul) { ... }` | `if (kosul) { ... }` |
+| `ile (kosul) { ... }` | `while (kosul) { ... }` |
+| `dön deger;` | `return deger;` |
+| `yazdir(x);` | `printf("%d\n", x);` |
+
+### Adım 4: GCC — Makine Kodu Derlemesi
+
+Üretilen C kodu gcc ile native makine koduna derlenir:
+
+```bash
+gcc program.c -o program.exe -lm
+```
+
+### Tam Örnek: Sıfırdan .exe'ye
+
+**1. TÜRK dosyası yazın (`test.turk`):**
+```turk
+fonk tamsayı kare(tamsayı n) {
+    dön n * n;
+}
+
+tamsayı i = 1;
+ile (i <= 5) {
+    yazdir(i);
+    yazdir("^2 =");
+    yazdir(kare(i));
+    i = i + 1;
+}
+```
+
+**2. C koduna çevirin:**
+```bash
+python -m turk.compiler test.turk
+```
+
+**3. Üretilen C kodu (`test.c`):**
+```c
+/* === TÜRK Dili Runtime === */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int kare(int n);
+
+int kare(int n) {
+    return (n * n);
+}
+
+int main() {
+    int i = 1;
+    while ((i <= 5)) {
+        printf("%d\n", i);
+        printf("%s\n", "^2 =");
+        printf("%d\n", kare(i));
+        i = (i + 1);
+    }
+    return 0;
+}
+```
+
+**4. gcc ile derleyin:**
+```bash
+gcc test.c -o test.exe -lm
+```
+
+**5. Çalıştırın (Python'a ihtiyaç YOK):**
+```bash
+test.exe
+```
+
+```
+1
+^2 =
+1
+2
+^2 =
+4
+3
+^2 =
+9
+4
+^2 =
+16
+5
+^2 =
+25
+```
+
+### Compiler Komut Seçenekleri
+
+| Seçenek | Açıklama |
+|---------|----------|
+| `dosya.turk` | Derlenecek TÜRK dosyası |
+| `-c`, `--compile` | C kodunu gcc ile derle |
+| `-r`, `--run` | Derle ve çalıştır |
+| `-o AD`, `--cikti AD` | Çıktı dosya adı |
+| `--stdout` | C kodunu ekrana bas |
+| `--temizle` | Geçici .c dosyasını sil |
+
+### Gereksinimler
+
+- **Interpreter için:** Python 3.8+
+- **Compiler için:** Python 3.8+ + gcc (MINGW, MSYS2, WSL, Linux, macOS)
+
+gcc kurulumu:
+- **Windows:** [MSYS2](https://www.msys2.org/) veya [MinGW-w64](https://www.mingw-w64.org/)
+- **Linux:** `sudo apt install gcc`
+- **macOS:** `xcode-select --install`
 
 ## 📝 Dil Özellikleri
 
@@ -84,8 +267,6 @@ python -m turk.main
 | `sayiya_cevir(değer)` | Sayıya çevir | `sayiya_cevir("42")` → 42 |
 | `metne_cevir(değer)` | Metne çevir | `metne_cevir(42)` → "42" |
 | `tip(değer)` | Tip adı | `tip(42)` → "tamsayı" |
-| `ekle(liste, eleman)` | Listeye ekle | `ekle(liste, 5)` |
-| `sil(liste, indeks)` | Listeden sil | `sil(liste, 0)` |
 
 ## 💡 Örnekler
 
@@ -154,34 +335,39 @@ ile (sayi <= 100) {
 ```
 dil/
 ├── turk/
-│   ├── __init__.py       # Paket tanımı
-│   ├── lexer.py          # Sözcüksel çözümleyici
-│   ├── parser.py         # Ayrıştırıcı (AST oluşturucu)
-│   ├── ast.py            # AST düğüm tanımları
-│   ├── interpreter.py    # Yorumlayıcı
-│   └── main.py           # Ana çalıştırıcı
+│   ├── __init__.py        # Paket tanımı
+│   ├── lexer.py           # Sözcüksel çözümleyici
+│   ├── parser.py          # Ayrıştırıcı (AST oluşturucu)
+│   ├── ast.py             # AST düğüm tanımları
+│   ├── interpreter.py     # Yorumlayıcı
+│   ├── compiler.py        # C kod üretici (codegen)
+│   ├── compiler_cli.py    # Compiler CLI aracı
+│   └── main.py            # Ana çalıştırıcı (interpreter)
 └── examples/
-    ├── merhaba.turk       # Merhaba Dünya
-    ├── fibonacci.turk     # Fibonacci serisi
-    ├── asal_sayi.turk     # Asal sayı bulma
-    ├── fizzbuzz.turk      # FizzBuzz
-    ├── faktoriyel.turk    # Faktöriyel hesaplama
+    ├── merhaba.turk        # Merhaba Dünya
+    ├── fibonacci.turk      # Fibonacci serisi
+    ├── asal_sayi.turk      # Asal sayı bulma
+    ├── fizzbuzz.turk       # FizzBuzz
+    ├── faktoriyel.turk     # Faktöriyel hesaplama
     └── hesap_makinesi.turk # Hesap makinesi
 ```
 
 ## 🏗️ Mimari
 
-TÜRK dili klasik interpreter mimarisi kullanır:
+### Interpreter Modu
+```
+.turk → Lexer → Parser → AST → Interpreter → Çıktı
+```
 
-1. **Lexer** → Kaynak kodu token'lara böler
-2. **Parser** → Token'lardan AST (Soyut Sözdizim Ağacı) oluşturur
-3. **Interpreter** → AST'yi çalıştırır
+### Compiler Modu
+```
+.turk → Lexer → Parser → AST → KodUretici → .c → gcc → .exe
+```
 
 ## 📋 Sınırlamalar
 
-- Şu an için sadece yorumlayıcı (interpreter) mevcut, derleyici yok
 - Dizi elemanlarına atama (`dizi[i] = x`) henüz desteklenmiyor
-- Sınıf/yapı tanımları AST düzeyinde mevcut ama henüz yorumlayıcıda tam implemente değil
+- Sınıf/yapı tanımları AST düzeyinde mevcut ama yorumlayıcıda tam implemente değil
 - Harici modül/import desteği yok
 
 ## 🤝 Katkıda Bulunma
